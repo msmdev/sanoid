@@ -28,11 +28,27 @@ apt install debhelper libcapture-tiny-perl libconfig-inifiles-perl pv lzop mbuff
 
 Clone this repo, build the debian package and install it (alternatively you can skip the package and do it manually like described below for CentOS):
 
+clone:
 ```bash
 git clone https://github.com/jimsalterjrs/sanoid.git
 cd sanoid
+```
+
+checkout version 2.2.0 (and fix for Ubuntu 24.04):
+either
+```bash
 # checkout latest stable release or stay on master for bleeding edge stuff (but expect bugs!)
 git checkout $(git tag | grep "^v" | tail -n 1)
+# cherry-pick commit to fix debian packaging with debian 12 and ubuntu 24.04 (see PR #926 from phreaker0:fix-debian-package commit 4d39e39)
+git cherry-pick c5a35a7
+```
+or instead
+```bash
+git checkout v2.2.0-fix-debian-package
+```
+
+build and install:
+```bash
 ln -s packages/debian .
 dpkg-buildpackage -uc -us
 sudo apt install ../sanoid_*_all.deb
